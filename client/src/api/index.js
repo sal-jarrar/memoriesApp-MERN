@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const url = 'http://localhost:5000/posts'
+const url = 'https://sultanmemoriesapp.herokuapp.com/posts'
 
 export const fetchPost = () => axios.get(url)
 export const createPost = (post) => axios.post(url, post)
