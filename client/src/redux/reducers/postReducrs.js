@@ -11,6 +11,12 @@ export const postReducer = (state = [], action) => {
       return state.map((post) =>
         post._id === action.payload._id ? action.payload : post
       )
+    case PostTypes.DELETE_POST:
+      return state.filter((post) => post._id !== action.payload)
+    case PostTypes.LIKE_UPDATE:
+      return state.map((post) =>
+        post._id === action.payload._id ? action.payload : post
+      )
 
     default:
       return state

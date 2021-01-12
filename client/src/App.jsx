@@ -11,12 +11,14 @@ import { getPosts } from './redux/actions/postActions'
 
 const App = () => {
   const [currentId, setCurrentId] = useState(0)
+  const [posts, setPosts] = useState([])
   const dispatch = useDispatch()
   const classes = useStyles()
 
   useEffect(() => {
     dispatch(getPosts())
-  }, [currentId, dispatch])
+    setPosts(getPosts())
+  }, [currentId, dispatch, setPosts])
 
   return (
     <Container maxWidth='lg'>
@@ -34,9 +36,14 @@ const App = () => {
             alignItems='stretch'
             spacing={3}
           >
-            <Grid item xs={12} sm={7}>
-              <Posts setCurrentId={setCurrentId} />
-            </Grid>
+            {posts.length === 0 ? (
+              <h2>You dont have a memories create one</h2>
+            ) : (
+              <Grid item xs={12} sm={7}>
+                <Posts setCurrentId={setCurrentId} />
+              </Grid>
+            )}
+
             <Grid item xs={12} sm={4}>
               <Form currentId={currentId} setCurrentId={setCurrentId} />
             </Grid>
