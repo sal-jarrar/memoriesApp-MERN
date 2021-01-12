@@ -35,6 +35,7 @@ const App = () => {
             justify='space-between'
             alignItems='stretch'
             spacing={3}
+            className={classes.mainContainer}
           >
             {posts.length === 0 ? (
               <h2>You dont have a memories create one</h2>
