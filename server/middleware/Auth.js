@@ -1,25 +1,30 @@
 import jwt from 'jsonwebtoken'
 
 const auth = async (req, res, next) => {
-  try {
-    const token = req.headers.authorization.split(' ')[1]
-    const isCustomAuth = token.length < 500
+  let token
 
-    let decodedData
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    try {
+      token = req.headers.authorization.split(' ')[1]
 
-    if (token && isCustomAuth) {
-      decodedData = jwt.verify(token, process.env.SECRET)
+      const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
-      req.userId = decodedData?.id
-    } else {
-      decodedData = jwt.decode(token)
+      req.user = await User.findById(decoded.id).select('-password')
 
-      req.userId = decodedData?.sub
+      next()
+    } catch (error) {
+      console.error(error)
+      res.status(401)
+      throw new Error('Not authorized, token failed')
     }
+  }
 
-    next()
-  } catch (error) {
-    console.log(error)
+  if (!token) {
+    res.status(401)
+    throw new Error('Not authorized, no token')
   }
 }
 
