@@ -12,10 +12,9 @@ import { useHistory } from 'react-router-dom'
 import { GoogleLogin } from 'react-google-login'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 
-import Icon from './icon'
-import { signin, signup } from '../../actions/auth'
+import Icon from './Icon'
+import { signin, signup } from '../../redux/actions/UserActions'
 import UserTypes from '../../redux/types/UserTypes'
-
 import useStyles from './styles'
 import Input from './Input'
 
@@ -54,6 +53,7 @@ const SignUp = () => {
   }
 
   const googleSuccess = async (res) => {
+    console.log(res)
     const result = res?.profileObj
     const token = res?.tokenId
 
@@ -132,7 +132,7 @@ const SignUp = () => {
             {isSignup ? 'Sign Up' : 'Sign In'}
           </Button>
           <GoogleLogin
-            clientId='564033717568-e5p23rhvcs4i6kffgsbci1d64r8hp6fn.apps.googleusercontent.com'
+            clientId='768172123118-1p7enerqba8jj4fnbn11bm5uq56tamqo.apps.googleusercontent.com'
             render={(renderProps) => (
               <Button
                 className={classes.googleButton}

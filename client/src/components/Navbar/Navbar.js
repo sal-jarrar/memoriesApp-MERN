@@ -4,7 +4,7 @@ import { Link, useHistory, useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 
 import memories from '../../images/memories.png'
-import * as actionType from '../../constants/actionTypes'
+import UserTypes from '../../redux/types/UserTypes'
 import useStyles from './styles'
 
 const Navbar = () => {
@@ -15,7 +15,7 @@ const Navbar = () => {
   const classes = useStyles()
 
   const logout = () => {
-    dispatch({ type: actionType.LOGOUT })
+    dispatch({ type: UserTypes.LOGOUT })
 
     history.push('/auth')
 
@@ -25,9 +25,14 @@ const Navbar = () => {
   useEffect(() => {
     const token = user?.token
 
+    if (token) {
+      const decodedToken = decode(token)
+
+      if (decodedToken.exp * 1000 < new Date().getTime()) logout()
+    }
+
     setUser(JSON.parse(localStorage.getItem('profile')))
   }, [location])
-
   return (
     <AppBar className={classes.appBar} position='static' color='inherit'>
       <div className={classes.brandContainer}>

@@ -2,7 +2,7 @@ import PostTypes from '../types/postTypes'
 import * as api from '../../api'
 
 export const getPosts = () => async (dispatch) => {
-  const { data } = await api.fetchPost()
+  const { data } = await api.fetchPosts()
   try {
     dispatch({
       type: PostTypes.FETCH_ALL,
