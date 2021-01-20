@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const API = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: 'https://sultanmemoriesapp.herokuapp.com',
 })
 
 API.interceptors.request.use((req) => {
@@ -23,4 +23,3 @@ export const deletePost = (id) => API.delete(`/posts/${id}`)
 
 export const signIn = (formData) => API.post('/user/signin', formData)
 export const signUp = (formData) => API.post('/user/signup', formData)
-// https://sultanmemoriesapp.herokuapp.com
