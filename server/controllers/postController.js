@@ -73,7 +73,7 @@ export const deletePost = async (req, res) => {
 export const likePost = async (req, res) => {
   const { id } = req.params
 
-  if (!req.userId) {
+  if (!req.user) {
     return res.json({ message: 'Unauthenticated' })
   }
 
@@ -82,12 +82,12 @@ export const likePost = async (req, res) => {
 
   const post = await PostMessage.findById(id)
 
-  const index = post.likes.findIndex((id) => id === String(req.userId))
+  const index = post.likes.findIndex((id) => id === String(req.user._id))
 
   if (index === -1) {
-    post.likes.push(req.userId)
+    post.likes.push(req.user._id)
   } else {
-    post.likes = post.likes.filter((id) => id !== String(req.userId))
+    post.likes = post.likes.filter((id) => id !== String(req.user._id))
   }
   const updatedPost = await PostMessage.findByIdAndUpdate(id, post, {
     new: true,
