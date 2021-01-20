@@ -8,7 +8,6 @@ import { createPost, updatePost } from '../../redux/actions/postActions'
 
 const Form = ({ currentId, setCurrentId }) => {
   const [postData, setPostData] = useState({
-    creator: '',
     title: '',
     message: '',
     tags: '',
@@ -19,6 +18,7 @@ const Form = ({ currentId, setCurrentId }) => {
   )
   const dispatch = useDispatch()
   const classes = useStyles()
+  const user = JSON.parse(localStorage.getItem('profile'))
 
   useEffect(() => {
     if (post) setPostData(post)
@@ -26,25 +26,29 @@ const Form = ({ currentId, setCurrentId }) => {
 
   const clear = () => {
     setCurrentId(0)
-    setPostData({
-      creator: '',
-      title: '',
-      message: '',
-      tags: '',
-      selectedFile: '',
-    })
+    setPostData({ title: '', message: '', tags: '', selectedFile: '' })
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
 
     if (currentId === 0) {
-      dispatch(createPost(postData))
+      dispatch(createPost({ ...postData, name: user?.result?.name }))
+      clear()
     } else {
-      dispatch(updatePost(currentId, postData))
+      dispatch(updatePost(currentId, { ...postData, name: user?.result?.name }))
+      clear()
     }
+  }
 
-    clear()
+  if (!user?.result?.name) {
+    return (
+      <Paper className={classes.paper}>
+        <Typography variant='h6' align='center'>
+          Please Sign In to create your own memories and like other's memories.
+        </Typography>
+      </Paper>
+    )
   }
 
   return (
@@ -58,16 +62,6 @@ const Form = ({ currentId, setCurrentId }) => {
         <Typography variant='h6'>
           {currentId ? `Editing "${post.title}"` : 'Creating a Memory'}
         </Typography>
-        <TextField
-          name='creator'
-          variant='outlined'
-          label='Creator'
-          fullWidth
-          value={postData.creator}
-          onChange={(e) =>
-            setPostData({ ...postData, creator: e.target.value })
-          }
-        />
         <TextField
           name='title'
           variant='outlined'
